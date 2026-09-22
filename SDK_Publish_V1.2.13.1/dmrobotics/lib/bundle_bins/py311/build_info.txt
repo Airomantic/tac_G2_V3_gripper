@@ -1,0 +1,8 @@
+env=ts311
+python=3.11
+python_executable=/home/daimon/anaconda3/envs/ts311/bin/python
+pybind11_include=/home/daimon/anaconda3/envs/ts311/lib/python3.11/site-packages/pybind11/include
+ort_dir=/home/daimon/ffnet/onnxruntime-linux-x64-gpu-1.19.0
+nvcc=/usr/local/cuda-12.2/bin/nvcc
+artifact=ffnet_bundle.so
+tagged_artifact=ffnet_bundle_py311.so

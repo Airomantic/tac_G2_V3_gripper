@@ -1,0 +1,8 @@
+env=ts39
+python=3.9
+python_executable=/home/daimon/anaconda3/envs/ts39/bin/python
+pybind11_include=/home/daimon/anaconda3/envs/ts39/lib/python3.9/site-packages/pybind11/include
+ort_dir=/home/daimon/ffnet/onnxruntime-linux-x64-gpu-1.19.0
+nvcc=/usr/local/cuda-12.2/bin/nvcc
+artifact=ffnet_bundle.so
+tagged_artifact=ffnet_bundle_py39.so

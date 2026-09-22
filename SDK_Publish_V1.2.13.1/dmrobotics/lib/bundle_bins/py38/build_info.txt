@@ -1,0 +1,8 @@
+env=ts38
+python=3.8
+python_executable=/home/daimon/anaconda3/envs/ts38/bin/python
+pybind11_include=/home/daimon/anaconda3/envs/ts38/lib/python3.8/site-packages/pybind11/include
+ort_dir=/home/daimon/ffnet/onnxruntime-linux-x64-gpu-1.19.0
+nvcc=/usr/local/cuda-12.2/bin/nvcc
+artifact=ffnet_bundle.so
+tagged_artifact=ffnet_bundle_py38.so

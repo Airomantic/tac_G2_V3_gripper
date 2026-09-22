@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "DM_V3Gripper"
+dynamic = ["version"]
+description = "Python gRPC client for the DM V3 gripper"
+readme = "gripper_readme.md"
+requires-python = ">=3.10"
+dependencies = [
+    "grpcio>=1.70.0",
+    "protobuf>=5.29.0",
+]
+
+[tool.setuptools]
+packages = ["DM_V3Gripper"]
+
+[tool.setuptools.dynamic]
+version = {attr = "DM_V3Gripper.__version__"}
+
+[tool.setuptools.package-data]
+DM_V3Gripper = ["*.proto"]

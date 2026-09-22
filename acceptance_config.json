@@ -1,0 +1,36 @@
+{
+  "gripper": {
+    "ip": "192.168.127.10",
+    "port": 50008,
+    "channel": "can0",
+    "motor_id": 1,
+    "wrong_ip": "203.0.113.1",
+    "wrong_port": 59999,
+    "wrong_motor_id": 999,
+    "test_speed": 10,
+    "force": 20
+  },
+  "sensors": [
+    {"dev_id": 0, "backend": "flux", "remote_addr": "192.168.127.10:50051", "pc_host": "192.168.127.100", "pc_port": 60000},
+    {"dev_id": 2, "backend": "flux", "remote_addr": "192.168.127.10:50052", "pc_host": "192.168.127.100", "pc_port": 60001}
+  ],
+  "limits": {
+    "connect_timeout_s": 9,
+    "init_timeout_s": 15,
+    "move_timeout_s": 30,
+    "position_tolerance": 5,
+    "speed_duration_s": 40,
+    "maximum_speed_jitter_s": 0.2,
+    "stop_settle_s": 0.5,
+    "startup_timeout_s": 60,
+    "shutdown_timeout_s": 5,
+    "stream_timeout_s": 3,
+    "fault_window_s": 30,
+    "warmup_seconds": 5,
+    "measurement_seconds": 20,
+    "minimum_fps": 90,
+    "maximum_fps_drop": 0.15,
+    "maximum_frame_gap_s": 0.5,
+    "contact_seconds": 3
+  }
+}
