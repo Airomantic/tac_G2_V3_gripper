@@ -3,3 +3,5 @@
 *.egg-info/
 /logs/
 /logs_pc_flux/
+.venv/
+.venv-ros/
