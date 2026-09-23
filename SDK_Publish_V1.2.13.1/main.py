@@ -136,7 +136,7 @@ def main() -> None:
     # Remote Flux device configuration (example)
     opt = SensorOptions(
         dev_id=2,
-        backend="CUDA",
+        backend="flux",
         mode=Mode.STANDARD,
         show_fps=True,
         max_fps=120,
@@ -146,7 +146,7 @@ def main() -> None:
         enable_shear=True,
         enable_force=True,
         remote_addr="192.168.127.10:50051",
-        pc_host="192.168.127.99",
+        pc_host="192.168.127.100",
         pc_port=60001,
     )
 
