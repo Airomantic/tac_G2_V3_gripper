@@ -23,6 +23,7 @@ Keyboard controls
 - 'q' : quit
 - 'r' : reset the sensor (keep the sensor surface free of contact during reset)
   - In the visualizer process, 'r' requests a reset via an IPC event.
+- Depth window's 'contrast' slider changes display gain only (gain = 2 ** value).
 
 Notes
 -----
@@ -47,6 +48,32 @@ from dmrobotics import (
 from dmrobotics.utils import put_arrows_on_image
 
 IS_WINDOWS = (os.name == "nt")
+
+
+def depth_preview(depth, frame_id, gain):
+    """Display SDK depth values at a fixed gain; never normalize each frame."""
+    values = np.asarray(depth)
+    finite = np.isfinite(values)
+    valid = values[finite]
+    safe = np.where(finite, values, 0)
+    gray = (np.clip(safe, 0, 255.0 / gain) * gain).astype(np.uint8)
+    preview = cv2.copyMakeBorder(gray, 44, 0, 0, 0, cv2.BORDER_CONSTANT, value=0)
+    if valid.size:
+        stats = f"min={valid.min():.4g} max={valid.max():.4g}"
+    else:
+        stats = "no finite depth values"
+    cv2.putText(preview, f"frame={frame_id} {stats}", (5, 16),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.4, 255, 1, cv2.LINE_AA)
+    cv2.putText(preview, f"SDK range: 0..{255.0 / gain:.4g}  invalid={values.size - valid.size}",
+                (5, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.4, 255, 1, cv2.LINE_AA)
+    return preview
+
+
+def open_depth_window():
+    cv2.namedWindow("depth", cv2.WINDOW_AUTOSIZE)
+    # Fixed default gain of 4096 makes small depths visible. Units are SDK values,
+    # not calibrated millimetres; moving the slider never changes sensor data.
+    cv2.createTrackbar("contrast", "depth", 12, 20, lambda _: None)
 
 
 def visualizer_process(queue_in: mp.Queue, running_event, reset_event):
@@ -140,7 +167,7 @@ def main() -> None:
         mode=Mode.STANDARD,
         show_fps=True,
         max_fps=120,
-        enable_raw=False,
+        enable_raw=True,
         enable_deformation=True,
         enable_depth=True,
         enable_shear=True,
@@ -176,6 +203,7 @@ def main() -> None:
         running = True
 
         try:
+            open_depth_window()
             while running:
                 if opt.backend == "Flux":
                     event, _ = sensor.getEvents()
@@ -226,7 +254,8 @@ def main() -> None:
                 # Display depth (scaled for preview)
                 fid, depth = sensor.getDepth()
                 if depth is not None:
-                    depth_img = (depth * 50).clip(0, 255).astype(np.uint8)
+                    gain = 2.0 ** cv2.getTrackbarPos("contrast", "depth")
+                    depth_img = depth_preview(depth, fid, gain)
                     cv2.imshow("depth", depth_img)
 
                 # Hotkeys from the main window loop
@@ -286,6 +315,7 @@ def main() -> None:
     p.start()
 
     try:
+        open_depth_window()
         while running_event.is_set():
             # Handle reset requests coming from the visualizer
             if reset_event.is_set():
@@ -344,7 +374,8 @@ def main() -> None:
             # Show depth locally (preview)
             fid, depth = sensor.getDepth()
             if depth is not None:
-                depth_img = (depth * 100).clip(0, 255).astype(np.uint8)
+                gain = 2.0 ** cv2.getTrackbarPos("contrast", "depth")
+                depth_img = depth_preview(depth, fid, gain)
                 cv2.imshow("depth", depth_img)
 
             # Main loop hotkeys (still via OpenCV window events)
@@ -406,4 +437,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     raise SystemExit(main() or 0)
-   
