@@ -1,0 +1,16 @@
+[Unit]
+Description=Configure DM V3 Gripper CAN-FD Interface
+Requires=sys-subsystem-net-devices-can0.device
+After=sys-subsystem-net-devices-can0.device
+Before=gripper.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/ip link set can0 down
+ExecStart=/usr/sbin/ip link set can0 type can bitrate 1000000 sample-point 0.80 dbitrate 5000000 dsample-point 0.75 fd on restart-ms 100
+ExecStart=/usr/sbin/ip link set can0 up
+RemainAfterExit=yes
+TimeoutStartSec=15
+
+[Install]
+WantedBy=multi-user.target
